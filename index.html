@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Whitepaper</title>
+  <style>
+    html,body{height:100%;margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto;}
+    header{padding:12px; background:#f6f6f6; border-bottom:1px solid #e6e6e6;}
+    .wrap{height:calc(100vh - 52px);} /* account for header */
+    object, iframe { width:100%; height:100%; border:0; display:block; }
+    .tools{padding:10px; text-align:center;}
+    .btn{display:inline-block;padding:8px 14px;border-radius:6px;border:1px solid #888;text-decoration:none;color:#111;background:#fff;}
+  </style>
+</head>
+<body>
+  <header>
+    <strong>Whitepaper</strong> — scroll to read
+  </header>
+
+  <div class="wrap" id="viewer">
+    <div style="padding:18px;text-align:center;">Loading... if this stays long, scroll down for a fallback button.</div>
+  </div>
+
+  <div class="tools" id="tools" style="display:none;">
+    <a id="openViewer" class="btn" target="_blank" rel="noopener">Open smooth viewer (recommended)</a>
+    &nbsp;
+    <a id="downloadPdf" class="btn" target="_blank" rel="noopener">Download PDF</a>
+  </div>
+
+  <script>
+  (function(){
+    var pdfName = 'paper.pdf'; // <-- put your PDF file name here if different
+    // Build PDF URL relative to current page
+    var base = window.location.href.split('#')[0].split('?')[0];
+    var pdfUrl;
+    if (base.endsWith('index.html')) {
+      pdfUrl = base.replace(/index\.html$/, pdfName);
+    } else {
+      pdfUrl = base.replace(/\/?$/, '/' + pdfName);
+    }
+
+    // Try to embed with <object> first
+    var viewer = document.getElementById('viewer');
+    var obj = document.createElement('object');
+    obj.data = pdfUrl;
+    obj.type = 'application/pdf';
+    obj.innerHTML = '<p>PDF cannot be shown inline. <a href="'+pdfUrl+'" target="_blank" rel="noopener">Open or download the PDF</a>.</p>';
+    viewer.innerHTML = '';
+    viewer.appendChild(obj);
+
+    // Show fallback tools
+    var tools = document.getElementById('tools');
+    tools.style.display = 'block';
+    document.getElementById('downloadPdf').href = pdfUrl;
+
+    // Create a link to Mozilla PDF.js viewer (works well for scrolling)
+    var pdfjsViewer = 'https://mozilla.github.io/pdf.js/web/viewer.html?file=';
+    document.getElementById('openViewer').href = pdfjsViewer + encodeURIComponent(pdfUrl);
+
+    // Extra: if browser can't display object (mobile), object may be blank — keep the viewer link.
+  })();
+  </script>
+</body>
+</html>
